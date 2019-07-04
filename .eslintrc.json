@@ -1,0 +1,21 @@
+{
+    "env": {
+        "node": true,
+        "browser": false,
+        "es6": true,
+        "jest": true
+    },
+    "extends": [
+        "airbnb"
+    ],
+    "parser": "babel-eslint",
+    "plugins": ["react", "react-native"],
+    "rules": {
+        "no-use-before-define": "off",
+        "react/prop-types": "off",
+        "comma-dangle": "off",
+        "import/no-unresolved": "off",
+        "react/jsx-filename-extension": "off",
+        "react/no-array-index-key": "off"
+    }
+}
