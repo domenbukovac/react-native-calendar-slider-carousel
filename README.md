@@ -12,11 +12,17 @@ The solution is implemented in JavaScript so no native module linking is require
 
 ## Usage
 
-`import {`[CalendarDays]`} from 'react-native-calendar-slider-carousel';`
+`import CalendarDays from 'react-native-calendar-slider-carousel';`
 
-All parameters for components are optional. By default the month of current local date will be displayed.
+All parameters for components are optional
 
-Event handler callbacks are called with `calendar objects` like this:
+### Calendar Demo
+
+<kbd>
+  <img src="https://github.com/domenbukovac/react-native-calendar-slider-carousel/blob/master/images/demo.gif?raw=true">
+</kbd>
+
+Used in combination with "react-native-collapsible"
 
 #### Basic parameters
 
