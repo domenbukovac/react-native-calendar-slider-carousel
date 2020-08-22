@@ -1,4 +1,4 @@
-import { StyleSheet, Platform } from 'react-native';
+import { Platform, StyleSheet } from 'react-native';
 import constants from './constants';
 
 export default StyleSheet.create({
@@ -6,12 +6,13 @@ export default StyleSheet.create({
     height: constants.DAY_SIZE,
     width: constants.DAY_SIZE,
     padding: 10,
-    shadowOpacity: 0.1,
+    shadowOpacity: Platform.OS === 'web' ? 0 : 0.18,
     shadowRadius: 4,
     shadowOffset: {
       height: 0,
       width: 0,
     },
+    elevation: 6,
   },
   singleDateBox: {
     borderRadius: constants.BORDER_RADIUS,
@@ -20,7 +21,14 @@ export default StyleSheet.create({
     height: 100,
     width: 100,
     flexDirection: 'column',
-    elevation: 1.2,
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
+    shadowOffset: {
+      height: 0,
+      width: 0,
+    },
+    elevation: 6,
+    zIndex: 3,
   },
   singleContainerSelected: {
     shadowOpacity: 0.3,
@@ -63,5 +71,11 @@ export default StyleSheet.create({
     fontSize: Platform.OS === 'ios' ? 16 : 15,
     textAlign: 'center',
     color: '#000',
+  },
+  arrow: {
+    height: constants.DAY_SIZE,
+    width: 36,
+    justifyContent: 'center',
+    alignItems: 'center'
   },
 });

@@ -1,7 +1,5 @@
 import React from 'react';
-import {
-  ScrollView, Text, View, TouchableOpacity
-} from 'react-native';
+import { Platform, ScrollView, Text, TouchableOpacity, View } from 'react-native';
 
 import moment from 'moment';
 import style from './style';
@@ -12,6 +10,7 @@ export default class CalendarDays extends React.Component {
     super(props);
     this.state = {
       selectedDayIndex: 0,
+      scrollPosition: 0,
     };
   }
 
@@ -33,6 +32,7 @@ export default class CalendarDays extends React.Component {
   }
 
   setScrollOffset = (index) => {
+    const { showArrows } = this.props;
     if (this.scrollView) {
       const { width, daysInView } = this.props;
 
@@ -47,6 +47,24 @@ export default class CalendarDays extends React.Component {
       const scrollOffset = { x: xOffset, animated: true };
 
       this.scrollView.scrollTo(scrollOffset);
+    }
+  };
+
+  scroll = (direction) => {
+    if (this.scrollView) {
+      const { scrollPosition } = this.state;
+      let newPosition = 0;
+      if (direction === 'left') {
+        newPosition = Math.max(scrollPosition - constants.DAY_SIZE, 0);
+      } else {
+        newPosition = scrollPosition + constants.DAY_SIZE;
+      }
+
+      this.setState({
+        scrollPosition: newPosition,
+      });
+
+      this.scrollView.scrollTo({ x: newPosition, animated: true });
     }
   };
 
@@ -103,6 +121,9 @@ export default class CalendarDays extends React.Component {
       disabledDates,
       width,
       paginate,
+      showArrows,
+      leftArrow,
+      rightArrow,
     } = this.props;
 
     let scrollWidth = null;
@@ -139,7 +160,7 @@ export default class CalendarDays extends React.Component {
             onPress={() => this.dateSelect({ key, date: availableDates[key].date })
             }
           >
-            <View style={[style.singleContainer, selectedStyle]}>
+            <View style={[style.singleContainer, Platform.OS !== 'web' ? selectedStyle : null]}>
               <View style={[style.singleDateBox, selectedStyle]}>
                 <View style={[style.monthContainer, isClosedMonthStyle]}>
                   <Text style={style.monthText}>{val.month}</Text>
@@ -162,11 +183,17 @@ export default class CalendarDays extends React.Component {
     }
 
     return (
-      <View style={{ height: constants.DAY_SIZE, width: scrollWidth }}>
+      <View style={{ height: constants.DAY_SIZE, width: scrollWidth, flexDirection: 'row' }}>
+        {showArrows ?
+          <TouchableOpacity style={style.arrow} onPress={() => this.scroll('left')}>
+            {leftArrow}
+          </TouchableOpacity>
+          : null}
         <ScrollView
           ref={(scrollView) => {
             this.scrollView = scrollView;
           }}
+          scrollEnabled={!showArrows}
           horizontal
           snapToInterval={
             paginate && scrollWidth % constants.DAY_SIZE === 0
@@ -176,9 +203,14 @@ export default class CalendarDays extends React.Component {
           decelerationRate="fast"
           showsHorizontalScrollIndicator={false}
         >
-          <View style={{ width: (scrollWidth % constants.DAY_SIZE) / 2 }} />
+          <View style={{ width: (scrollWidth % constants.DAY_SIZE) / 2 }}/>
           {days || null}
         </ScrollView>
+        {showArrows ?
+          <TouchableOpacity style={style.arrow} onPress={() => this.scroll('right')}>
+            {rightArrow}
+          </TouchableOpacity>
+          : null}
       </View>
     );
   }
